@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Text with Colorful Background</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #0a0a0a;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, 
+                rgba(116, 209, 203, 0.986), 
+                rgba(198, 39, 177, 0.985), 
+                rgb(90, 209, 129), 
+                rgba(212, 89, 89, 0.971), 
+                #0a0a0a 80%);
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite;
+            transition: transform 0.1s ease;
+            z-index: -1;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        .neon-container {
+            position: relative;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .neon-text {
+            position: relative;
+            font-size: 5em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #fff;
+            text-shadow:
+                0 0 5px #00fff0,
+                0 0 10px #00fff0,
+                0 0 20px #00fff0,
+                0 0 40px #00fff0,
+                0 0 60px #00fff0;
+            animation: flicker 2s infinite alternate;
+            transition: text-shadow 0.3s ease;
+        }
+
+        .neon-text::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: #fff;
+            text-shadow:
+                0 0 5px #ff00de,
+                0 0 15px #ff00de,
+                0 0 25px #ff00de;
+            opacity: 0.7;
+            animation: flicker-before 2.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes flicker-before {
+            0%, 19%, 23%, 26%, 54%, 58%, 100% {
+                opacity: 0.7;
+            }
+            20%, 25%, 55% {
+                opacity: 0.6;
+            }
+        }
+
+        .reflection {
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to bottom, rgba(0, 255, 240, 0.2), transparent);
+            filter: blur(5px);
+            opacity: 0.5;
+        }
+
+        .neon-container:hover .neon-text {
+            text-shadow:
+                0 0 10px #00fff0,
+                0 0 20px #00fff0,
+                0 0 40px #00fff0,
+                0 0 80px #00fff0,
+                0 0 120px #00fff0;
+        }
+    </style>
+</head>
+<body>
+    <div class="background" id="bg"></div>
+    <div class="neon-container">
+        <h1 class="neon-text" data-text="SnippetWizard">SnippetWizard</h1>
+        <div class="reflection"></div>
+    </div>
+
+    <script>
+        const neonText = document.querySelector('.neon-text');
+        const background = document.getElementById('bg');
+
+        // Simple random flicker for text
+        setInterval(() => {
+            if (Math.random() < 0.2) {
+                neonText.style.opacity = '0.8';
+                setTimeout(() => neonText.style.opacity = '1', 100);
+            }
+        }, 1000);
+
+        // Movable background based on mouse position
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20; // Max 20px movement
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            background.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    </script>
+</body>
+</html>
